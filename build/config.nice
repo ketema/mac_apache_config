@@ -1,0 +1,34 @@
+#! /bin/sh
+#
+# Created by configure
+
+CC="/usr/bin/gcc-4.2"; export CC
+CFLAGS="-O2 -arch x86_64"; export CFLAGS
+CPPFLAGS="-I/opt/local/include"; export CPPFLAGS
+LDFLAGS="-L/opt/local/lib -arch x86_64"; export LDFLAGS
+"./configure" \
+"--prefix=/opt/local/apache2" \
+"--with-apr=/opt/local/bin/apr-1-config" \
+"--with-apr-util=/opt/local/bin/apu-1-config" \
+"--libdir=/opt/local/lib" \
+"--with-expat=/opt/local" \
+"--with-pcre=/opt/local" \
+"--mandir=/opt/local/share/man" \
+"--enable-mods-shared=all" \
+"--enable-ssl" \
+"--with-ssl=/opt/local" \
+"--enable-cache" \
+"--enable-disk_cache" \
+"--enable-file_cache" \
+"--enable-mem_cache" \
+"--enable-deflate" \
+"--enable-proxy" \
+"--enable-proxy-connect" \
+"--enable-proxy-http" \
+"--enable-proxy-ftp" \
+"--with-mpm=prefork" \
+"CC=/usr/bin/gcc-4.2" \
+"CFLAGS=-O2 -arch x86_64" \
+"LDFLAGS=-L/opt/local/lib -arch x86_64" \
+"CPPFLAGS=-I/opt/local/include" \
+"$@"
