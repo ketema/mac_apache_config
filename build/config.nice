@@ -2,10 +2,10 @@
 #
 # Created by configure
 
-CC="/usr/bin/gcc-4.2"; export CC
-CFLAGS="-O2 -arch x86_64"; export CFLAGS
+CC="/Developer/usr/bin/clang"; export CC
+CFLAGS="-O2"; export CFLAGS
 CPPFLAGS="-I/opt/local/include"; export CPPFLAGS
-LDFLAGS="-L/opt/local/lib -arch x86_64"; export LDFLAGS
+LDFLAGS="-L/opt/local/lib"; export LDFLAGS
 "./configure" \
 "--prefix=/opt/local/apache2" \
 "--with-apr=/opt/local/bin/apr-1-config" \
@@ -15,6 +15,7 @@ LDFLAGS="-L/opt/local/lib -arch x86_64"; export LDFLAGS
 "--with-pcre=/opt/local" \
 "--mandir=/opt/local/share/man" \
 "--enable-mods-shared=all" \
+"--enable-authn-alias=shared" \
 "--enable-ssl" \
 "--with-ssl=/opt/local" \
 "--enable-cache" \
@@ -27,8 +28,8 @@ LDFLAGS="-L/opt/local/lib -arch x86_64"; export LDFLAGS
 "--enable-proxy-http" \
 "--enable-proxy-ftp" \
 "--with-mpm=prefork" \
-"CC=/usr/bin/gcc-4.2" \
-"CFLAGS=-O2 -arch x86_64" \
-"LDFLAGS=-L/opt/local/lib -arch x86_64" \
+"CC=/Developer/usr/bin/clang" \
+"CFLAGS=-O2" \
+"LDFLAGS=-L/opt/local/lib" \
 "CPPFLAGS=-I/opt/local/include" \
 "$@"

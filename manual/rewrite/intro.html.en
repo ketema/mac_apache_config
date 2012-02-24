@@ -18,7 +18,8 @@
 <div id="path">
 <a href="http://www.apache.org/">Apache</a> &gt; <a href="http://httpd.apache.org/">HTTP Server</a> &gt; <a href="http://httpd.apache.org/docs/">Documentation</a> &gt; <a href="../">Version 2.2</a> &gt; <a href="./">Rewrite</a></div><div id="page-content"><div id="preamble"><h1>Apache mod_rewrite Introduction</h1>
 <div class="toplang">
-<p><span>Available Languages: </span><a href="../en/rewrite/rewrite_intro.html" title="English">&nbsp;en&nbsp;</a></p>
+<p><span>Available Languages: </span><a href="../en/rewrite/intro.html" title="English">&nbsp;en&nbsp;</a> |
+<a href="../fr/rewrite/intro.html" hreflang="fr" rel="alternate" title="Français">&nbsp;fr&nbsp;</a></p>
 </div>
 
 <p>This document supplements the <code class="module"><a href="../mod/mod_rewrite.html">mod_rewrite</a></code>
@@ -30,15 +31,12 @@ but this doc should help the beginner get their feet wet.
 </div>
 <div id="quickview"><ul id="toc"><li><img alt="" src="../images/down.gif" /> <a href="#introduction">Introduction</a></li>
 <li><img alt="" src="../images/down.gif" /> <a href="#regex">Regular Expressions</a></li>
-<li><img alt="" src="../images/down.gif" /> <a href="#rewriterule">RewriteRule basics</a></li>
+<li><img alt="" src="../images/down.gif" /> <a href="#rewriterule">RewriteRule Basics</a></li>
 <li><img alt="" src="../images/down.gif" /> <a href="#flags">Rewrite Flags</a></li>
-<li><img alt="" src="../images/down.gif" /> <a href="#rewritecond">Rewrite conditions</a></li>
+<li><img alt="" src="../images/down.gif" /> <a href="#rewritecond">Rewrite Conditions</a></li>
 <li><img alt="" src="../images/down.gif" /> <a href="#rewritemap">Rewrite maps</a></li>
 <li><img alt="" src="../images/down.gif" /> <a href="#htaccess">.htaccess files</a></li>
-</ul><h3>See also</h3><ul class="seealso"><li><a href="../mod/mod_rewrite.html">Module
-documentation</a></li><li><a href="rewrite_tech.html">Technical details</a></li><li><a href="rewrite_guide.html">Practical solutions to common
-problems</a></li><li><a href="rewrite_guide_advanced.html">Practical solutions to
-advanced problems</a></li></ul></div>
+</ul><h3>See also</h3><ul class="seealso"><li><a href="../mod/mod_rewrite.html">Module documentation</a></li><li><a href="remapping.html">Redirection and remapping</a></li><li><a href="access.html">Controlling access</a></li><li><a href="vhosts.html">Virtual hosts</a></li><li><a href="proxy.html">Proxying</a></li><li><a href="rewritemap.html">Using RewriteMap</a></li><li><a href="advanced.html">Advanced techniques and tricks</a></li><li><a href="avoid.html">When not to use mod_rewrite</a></li></ul></div>
 <div class="top"><a href="#page-header"><img alt="top" src="../images/up.gif" /></a></div>
 <div class="section">
 <h2><a name="introduction" id="introduction">Introduction</a></h2>
@@ -60,11 +58,12 @@ on <a href="../urlmapping.html">mapping URLs to the
 filesystem</a>.</p>
 
 <p>Finally, before proceeding, be sure to configure
-the <code class="directive"><a href="../mod/mod_rewrite.html#rewritelog">RewriteLog</a></code>. Although
-this log file can give an overwhelming amount of information, it is
-indispensable in debugging problems with <code class="module"><a href="../mod/mod_rewrite.html">mod_rewrite</a></code>
-configuration, since it will tell you exactly how each rule is
-processed.</p>
+<code class="module"><a href="../mod/mod_rewrite.html">mod_rewrite</a></code>'s log level to one of the trace levels using
+the <code class="directive"><a href="../mod/core.html#loglevel">LogLevel</a></code> directive. Although this
+can give an overwhelming amount of information, it is indispensable in
+debugging problems with <code class="module"><a href="../mod/mod_rewrite.html">mod_rewrite</a></code> configuration, since
+it will tell you exactly how each rule is processed.</p>
+
 </div><div class="top"><a href="#page-header"><img alt="top" src="../images/up.gif" /></a></div>
 <div class="section">
 <h2><a name="regex" id="regex">Regular Expressions</a></h2>
@@ -74,7 +73,7 @@ Regular Expression</a> vocabulary. In this document, we do not attempt
 to provide a detailed reference to regular expressions. For that, we
 recommend the <a href="http://pcre.org/pcre.txt">PCRE man pages</a>, the
 <a href="http://perldoc.perl.org/perlre.html">Perl regular
-expression man page</a>, and <a href="http://www.oreilly.com/catalog/regex2/index.html">Mastering
+expression man page</a>, and <a href="http://shop.oreilly.com/product/9780596528126.do">Mastering
 Regular Expressions, by Jeffrey Friedl</a>.</p>
 
 <p>In this document, we attempt to provide enough of a regex vocabulary
@@ -140,18 +139,19 @@ the expression.</p>
       which can be used with the strings <code>$N</code> and
       <code>%N</code> (see below). These are available for creating
       the strings <em>Substitution</em> and <em>TestString</em>.
-      Figure 2 shows to which locations the back-references are
-      transferred for expansion.</p>
+      Figure 1 shows to which locations the back-references are
+      transferred for expansion as well as illustrating the flow of the
+      RewriteRule, RewriteCond matching.</p>
 
 <p class="figure">
-      <img src="../images/mod_rewrite_fig2.gif" width="381" height="179" alt="[Needs graphics capability to display]" /><br />
-      <dfn>Figure 2:</dfn> The back-reference flow through a rule.
+      <img src="../images/rewrite_rule_flow.png" alt="Flow of RewriteRule and RewriteCond matching" /><br />
+      <dfn>Figure 1:</dfn> The back-reference flow through a rule.
 </p>
 
 
 </div><div class="top"><a href="#page-header"><img alt="top" src="../images/up.gif" /></a></div>
 <div class="section">
-<h2><a name="rewriterule" id="rewriterule">RewriteRule basics</a></h2>
+<h2><a name="rewriterule" id="rewriterule">RewriteRule Basics</a></h2>
 <p>A <code class="directive"><a href="../mod/mod_rewrite.html#rewriterule">RewriteRule</a></code> consists
 of three arguments separated by spaces. The arguments are</p>
 <ol>
@@ -164,6 +164,12 @@ of three arguments separated by spaces. The arguments are</p>
 expression</a> matched against the URL-Path of the incoming request
 (the part after the hostname but before any question mark indicating
 the beginning of a query string).</p>
+
+<p class="figure">
+      <img src="../images/syntax_rewriterule.png" alt="Syntax of the RewriteRule directive" /><br />
+      <dfn>Figure 2:</dfn> Syntax of the RewriteRule directive.
+</p>
+
 
 <p>The <var>Substitution</var> can itself be one of three things:</p>
 
@@ -228,11 +234,11 @@ RewriteRule ^puppy.html smalldog.html [NC]
 </code></p></div>
 
 <p>For more details on the available flags, their meanings, and
-examples, see the <a href="rewrite_flags.html">Rewrite Flags</a> document.</p>
+examples, see the <a href="flags.html">Rewrite Flags</a> document.</p>
 
 </div><div class="top"><a href="#page-header"><img alt="top" src="../images/up.gif" /></a></div>
 <div class="section">
-<h2><a name="rewritecond" id="rewritecond">Rewrite conditions</a></h2>
+<h2><a name="rewritecond" id="rewritecond">Rewrite Conditions</a></h2>
 <p>One or more <code class="directive"><a href="../mod/mod_rewrite.html#rewritecond">RewriteCond</a></code>
 directives can be used to restrict the types of requests that will be
 subject to the
@@ -241,6 +247,11 @@ first argument is a variable describing a characteristic of the
 request, the second argument is a <a href="#regex">regular
 expression</a> that must match the variable, and a third optional
 argument is a list of flags that modify how the match is evaluated.</p>
+
+<p class="figure">
+      <img src="../images/syntax_rewritecond.png" alt="Syntax of the RewriteCond directive" /><br />
+      <dfn>Figure 3:</dfn> Syntax of the RewriteCond directive
+</p>
 
 <p>For example, to send all requests from a particular IP range to a
 different server, you could use:</p>
@@ -254,7 +265,7 @@ one <code class="directive"><a href="../mod/mod_rewrite.html#rewritecond">Rewrit
 specified, they must all match for
 the <code class="directive"><a href="../mod/mod_rewrite.html#rewriterule">RewriteRule</a></code> to be
 applied. For example, to deny requests that contain the word "hack" in
-their query string, except if they also contain a cookie containing
+their query string, unless they also contain a cookie containing
 the word "go", you could use:</p>
 <div class="example"><p><code>
 RewriteCond %{QUERY_STRING} hack<br />
@@ -283,7 +294,10 @@ and <code>$1</code> would contain <code>foo/bar</code>.</p>
 </div><div class="top"><a href="#page-header"><img alt="top" src="../images/up.gif" /></a></div>
 <div class="section">
 <h2><a name="rewritemap" id="rewritemap">Rewrite maps</a></h2>
-<p>See <code class="directive"><a href="../mod/mod_rewrite.html#rewritemap">RewriteMap</a></code>.</p>
+
+<p>The <code class="directive"><a href="../mod/mod_rewrite.html#rewritemap">RewriteMap</a></code> directive
+provides a way to call an external function, so to speak, to do your
+rewriting for you. This is discussed in greater detail in the <a href="rewritemap.html">RewriteMap supplementary documentation</a>.</p>
 </div><div class="top"><a href="#page-header"><img alt="top" src="../images/up.gif" /></a></div>
 <div class="section">
 <h2><a name="htaccess" id="htaccess">.htaccess files</a></h2>
@@ -305,8 +319,9 @@ the <code class="directive"><a href="../mod/mod_rewrite.html#rewriterule">Rewrit
 
 </div></div>
 <div class="bottomlang">
-<p><span>Available Languages: </span><a href="../en/rewrite/rewrite_intro.html" title="English">&nbsp;en&nbsp;</a></p>
+<p><span>Available Languages: </span><a href="../en/rewrite/intro.html" title="English">&nbsp;en&nbsp;</a> |
+<a href="../fr/rewrite/intro.html" hreflang="fr" rel="alternate" title="Français">&nbsp;fr&nbsp;</a></p>
 </div><div id="footer">
-<p class="apache">Copyright 2009 The Apache Software Foundation.<br />Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.</p>
+<p class="apache">Copyright 2012 The Apache Software Foundation.<br />Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.</p>
 <p class="menu"><a href="../mod/">Modules</a> | <a href="../mod/directives.html">Directives</a> | <a href="../faq/">FAQ</a> | <a href="../glossary.html">Glossary</a> | <a href="../sitemap.html">Sitemap</a></p></div>
 </body></html>

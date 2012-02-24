@@ -181,6 +181,7 @@ ap_method_list_add
 ap_method_list_remove
 ap_clear_method_list
 ap_set_content_type
+ap_set_accept_ranges
 ap_rputc
 ap_rputs
 ap_rwrite
@@ -303,6 +304,7 @@ ap_find_last_token
 ap_is_url
 ap_unescape_url
 ap_unescape_url_keep2f
+ap_unescape_url_keep2f_ex
 ap_no2slash
 ap_getparents
 ap_escape_path_segment
@@ -416,6 +418,7 @@ unixd_set_user
 unixd_set_group
 unixd_set_chroot_dir
 unixd_set_rlimit
+unixd_set_suexec
 unixd_set_proc_mutex_perms
 unixd_set_global_mutex_perms
 unixd_accept

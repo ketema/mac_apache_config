@@ -38,10 +38,12 @@
 <div id="quickview"><ul id="toc"><li><img alt="" src="../images/down.gif" /> <a href="#req">Operating System Requirements</a></li>
 <li><img alt="" src="../images/down.gif" /> <a href="#down">Downloading Apache for Windows</a></li>
 <li><img alt="" src="../images/down.gif" /> <a href="#inst">Installing Apache for Windows</a></li>
+<li><img alt="" src="../images/down.gif" /> <a href="#advinst">Advanced Installation Topics</a></li>
 <li><img alt="" src="../images/down.gif" /> <a href="#cust">Customizing Apache for Windows</a></li>
 <li><img alt="" src="../images/down.gif" /> <a href="#winsvc">Running Apache as a Service</a></li>
 <li><img alt="" src="../images/down.gif" /> <a href="#wincons">Running Apache as a Console Application</a></li>
 <li><img alt="" src="../images/down.gif" /> <a href="#test">Testing the Installation</a></li>
+<li><img alt="" src="../images/down.gif" /> <a href="#windrivemap">Configuring Access to Network Resources</a></li>
 </ul></div>
 <div class="top"><a href="#page-header"><img alt="top" src="../images/up.gif" /></a></div>
 <div class="section">
@@ -161,6 +163,63 @@
     are lots of other options which you should set before you really
     start using Apache. However, to get started quickly, the files
     should work as installed.</p>
+  </div><div class="top"><a href="#page-header"><img alt="top" src="../images/up.gif" /></a></div>
+<div class="section">
+<h2><a name="advinst" id="advinst">Advanced Installation Topics</a></h2>
+    
+
+    <p>One feature of the installer, "Build Headers and Libraries", can be
+    ignored by most users, but should be installed if compiling third party
+    modules.  The "APR Iconv Code Pages" can similarly be omitted by most
+    users, unless using <code class="module"><a href="../mod/mod_charset_lite.html">mod_charset_lite</a></code> or a third party
+    module which relies on APR internationalization features.</p>
+
+    <p>There are requests to ship a .zip file from time to time.  There is
+    no point in the ASF consuming additional storage, mirroring and bandwidth
+    for this purpose, because the .msi installer allows the installation
+    artifacts to all be unpacked using the <code>msiexec /a</code> network
+    installation option.  Using this command against any .msi will result
+    in an exploded tree of all of the individual files and components.</p>
+
+    <p>The installation options above can be customized by users familiar
+    with msiexec.exe options and silent installation.  The actual installer
+    sources are available in the httpd/httpd/win32-msi/ tree of the httpd
+    project subversion respository.  For reference, some of the more common
+    variables which may be modified are;</p>
+
+    <ul>
+      <li><code>AgreeToLicense</code> (toggle to "Yes")</li>
+      <li><code>ALLUSERS</code> (choose between Null and "1")</li>
+      <li><code>ApplicationUsers</code> (toggle to "OnlyCurrentUser")</li>
+      <li><code>EXISTING_APACHE_SERVICE_PATH</code></li>
+      <li><code>INSTALLDIR</code> (default "ProgramFilesFolder\Apache Software Foundation\Apache2.2\")</li>
+      <li><code>INSTALLLEVEL</code> (default "100", refer to list below)</li>
+      <li><code>RESOLVED_WINSOCK2</code> (toggle to "1")</li>
+      <li><code>SERVERADMIN</code></li>
+      <li><code>SERVERDOMAIN</code></li>
+      <li><code>SERVERNAME</code></li>
+      <li><code>SERVERPORT</code> (default "80")</li>
+      <li><code>SERVERSSLPORT</code> (default "443")</li>
+      <li><code>SERVICEINTERNALNAME</code> (default "Apache2.2", no spaces!)</li>
+      <li><code>SERVICENAME</code> (default "Apache2.2", include spaces)</li>
+      <li><code>SetupType</code> (default "Typical")</li>
+    </ul>
+
+    <p>The installation level of various features, which may be individually
+    toggled, include;</p>
+
+    <ul>
+      <li>Apache (1, base Apache HTTP Server 2.2 feature)</li>
+      <li>ApacheDocs (11, Apache Documentation)</li>
+      <li>ApacheMonitoring (41, Apache Service Taskbar Icon)</li>
+      <li>ApacheRuntime (1, Apache Runtime)</li>
+      <li>BuildFiles (101, Build Headers and Libraries)</li>
+      <li>Iconv (21, APR Iconv Code Pages)</li>
+      <li>OpensslBin (31, OpenSSL Runtime)</li>
+      <li>SslBin (41, Ssl Binaries)</li>
+    </ul>
+
+
   </div><div class="top"><a href="#page-header"><img alt="top" src="../images/up.gif" /></a></div>
 <div class="section">
 <h2><a name="cust" id="cust">Customizing Apache for Windows</a></h2>
@@ -692,11 +751,56 @@
     services include other WWW servers, some firewall implementations,
     and even some client applications (such as Skype) which will use port
     80 to attempt to bypass firewall issues.</p>
+  </div><div class="top"><a href="#page-header"><img alt="top" src="../images/up.gif" /></a></div>
+<div class="section">
+<h2><a name="windrivemap" id="windrivemap">Configuring Access to Network Resources</a></h2>
+    
+
+  <p>Access to files over the network can be specified using two
+  mechanisms provided by Windows:</p>
+
+  <dl>
+    <dt>Mapped drive letters</dt>
+    <dd>e.g., <code>Alias /images/ Z:/</code></dd>
+
+    <dt>UNC paths</dt>
+    <dd>e.g., <code>Alias /images/ //imagehost/www/images/</code></dd>
+  </dl>
+
+  <p>Mapped drive letters allow the administrator to maintain the
+  mapping to a specific machine and path outside of the Apache httpd
+  configuration.  However, these mappings are associated only with
+  interactive sessions and are not directly available to Apache httpd
+  when it is started as a service.  <strong>Use only UNC paths for
+  network resources in httpd.conf</strong> so that the resources can
+  be accessed consistently regardless of how Apache httpd is started.
+  (Arcane and error prone procedures may work around the restriction
+  on mapped drive letters, but this is not recommended.)</p>
+
+  <div class="example"><h3>Example DocumentRoot with UNC path</h3><p><code>
+  DocumentRoot //dochost/www/html/
+  </code></p></div>
+
+  <div class="example"><h3>Example DocumentRoot with IP address in UNC path</h3><p><code>
+  DocumentRoot //192.168.1.50/docs/<br />
+  </code></p></div>
+
+  <div class="example"><h3>Example Alias and corresponding Directory with UNC path</h3><p><code>
+  Alias /images/ //imagehost/www/images/<br />
+  <br />
+  &lt;Directory //imagehost/www/images/&gt;<br />
+  ...<br />
+  &lt;Directory&gt;<br />
+  </code></p></div>
+
+  <p>When running Apache httpd as a service, you must create a
+  separate account in order to access network resources, as described
+  above.</p>
   </div></div>
 <div class="bottomlang">
 <p><span>Available Languages: </span><a href="../en/platform/windows.html" title="English">&nbsp;en&nbsp;</a> |
 <a href="../ko/platform/windows.html" hreflang="ko" rel="alternate" title="Korean">&nbsp;ko&nbsp;</a></p>
 </div><div id="footer">
-<p class="apache">Copyright 2009 The Apache Software Foundation.<br />Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.</p>
+<p class="apache">Copyright 2012 The Apache Software Foundation.<br />Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.</p>
 <p class="menu"><a href="../mod/">Modules</a> | <a href="../mod/directives.html">Directives</a> | <a href="../faq/">FAQ</a> | <a href="../glossary.html">Glossary</a> | <a href="../sitemap.html">Sitemap</a></p></div>
 </body></html>

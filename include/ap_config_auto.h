@@ -11,7 +11,7 @@
 /* #undef AP_ENABLE_EXCEPTION_HOOK */
 
 /* Allow IPv4 connections on IPv6 listening sockets */
-#define AP_ENABLE_V4_MAPPED 1
+/* #undef AP_ENABLE_V4_MAPPED */
 
 /* Minimum allowed GID */
 /* #undef AP_GID_MIN */
@@ -205,6 +205,9 @@
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME ""
+
+/* Define to the home page for this package. */
+#define PACKAGE_URL ""
 
 /* Define to the version of this package. */
 #define PACKAGE_VERSION ""

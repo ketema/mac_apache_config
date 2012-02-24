@@ -38,17 +38,17 @@ BASE_CXX = $(CXX) $(ALL_CXXFLAGS) $(ALL_CPPFLAGS) $(ALL_INCLUDES)
 COMPILE      = $(BASE_CC) 
 CXX_COMPILE  = $(BASE_CXX) 
 
-SH_COMPILE     = $(LIBTOOL) --mode=compile $(BASE_CC) -prefer-pic -c $< && touch $@
-SH_CXX_COMPILE = $(LIBTOOL) --mode=compile $(BASE_CXX) -prefer-pic -c $< && touch $@
+SH_COMPILE     = $(LIBTOOL) --mode=compile --tag=CC $(BASE_CC) -prefer-pic -c $< && touch $@
+SH_CXX_COMPILE = $(LIBTOOL) --mode=compile --tag=CXX $(BASE_CXX) -prefer-pic -c $< && touch $@
 
-LT_COMPILE     = $(LIBTOOL) --mode=compile $(COMPILE) -prefer-non-pic -static -c $< && touch $@
-LT_CXX_COMPILE = $(LIBTOOL) --mode=compile $(CXX_COMPILE) -prefer-non-pic -static -c $< && touch $@
+LT_COMPILE     = $(LIBTOOL) --mode=compile --tag=CC $(COMPILE) -prefer-non-pic -static -c $< && touch $@
+LT_CXX_COMPILE = $(LIBTOOL) --mode=compile --tag=CXX $(CXX_COMPILE) -prefer-non-pic -static -c $< && touch $@
 
 # Link-related commands
 
-LINK     = $(LIBTOOL) --mode=link $(CC) $(ALL_CFLAGS)  $(LT_LDFLAGS) $(ALL_LDFLAGS) -o $@
-SH_LINK  = $(SH_LIBTOOL) --mode=link $(CC) $(ALL_CFLAGS) $(LT_LDFLAGS) $(ALL_LDFLAGS) $(SH_LDFLAGS) $(CORE_IMPLIB) $(SH_LIBS) -o $@
-MOD_LINK = $(LIBTOOL) --mode=link $(CC) $(ALL_CFLAGS) -static $(LT_LDFLAGS) $(ALL_LDFLAGS) -o $@
+LINK     = $(LIBTOOL) --mode=link --tag=CC $(CC) $(ALL_CFLAGS)  $(LT_LDFLAGS) $(ALL_LDFLAGS) -o $@
+SH_LINK  = $(SH_LIBTOOL) --mode=link --tag=CC $(CC) $(ALL_CFLAGS) $(LT_LDFLAGS) $(ALL_LDFLAGS) $(SH_LDFLAGS) $(CORE_IMPLIB) $(SH_LIBS) -o $@
+MOD_LINK = $(LIBTOOL) --mode=link --tag=CC $(CC) $(ALL_CFLAGS) -static $(LT_LDFLAGS) $(ALL_LDFLAGS) -o $@
 
 # Cross compile commands
 
@@ -216,7 +216,7 @@ SHLIB_SUFFIX = so
 
 # Makes an import library from a def file
 .def.la:
-	$(LIBTOOL) --mode=compile $(MK_IMPLIB) -o $@ $<
+	$(LIBTOOL) --mode=compile --tag=CC $(MK_IMPLIB) -o $@ $<
 
 #
 # Dependencies
