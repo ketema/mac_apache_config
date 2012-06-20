@@ -5,3 +5,4 @@ modules/
 htdocs/
 icons/
 include/
+vhosts.include
