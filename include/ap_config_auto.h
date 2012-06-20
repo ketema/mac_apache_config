@@ -11,7 +11,7 @@
 /* #undef AP_ENABLE_EXCEPTION_HOOK */
 
 /* Allow IPv4 connections on IPv6 listening sockets */
-/* #undef AP_ENABLE_V4_MAPPED */
+#define AP_ENABLE_V4_MAPPED 1
 
 /* Minimum allowed GID */
 /* #undef AP_GID_MIN */

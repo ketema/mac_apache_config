@@ -2,8 +2,8 @@
 #
 # Created by configure
 
-CC="/Developer/usr/bin/clang"; export CC
-CFLAGS="-O2"; export CFLAGS
+CC="/usr/bin/clang"; export CC
+CFLAGS="-pipe -O2"; export CFLAGS
 CPPFLAGS="-I/opt/local/include"; export CPPFLAGS
 LDFLAGS="-L/opt/local/lib"; export LDFLAGS
 "./configure" \
@@ -28,8 +28,8 @@ LDFLAGS="-L/opt/local/lib"; export LDFLAGS
 "--enable-proxy-http" \
 "--enable-proxy-ftp" \
 "--with-mpm=prefork" \
-"CC=/Developer/usr/bin/clang" \
-"CFLAGS=-O2" \
+"CC=/usr/bin/clang" \
+"CFLAGS=-pipe -O2" \
 "LDFLAGS=-L/opt/local/lib" \
 "CPPFLAGS=-I/opt/local/include" \
 "$@"
