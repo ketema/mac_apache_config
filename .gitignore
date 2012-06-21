@@ -1,0 +1,8 @@
+build/
+cgi-bin/
+error/
+modules/
+htdocs/
+icons/
+include/
+vhosts.include
